@@ -8,7 +8,11 @@ import com.android.myapplication.openapi_codingwithmitch.viewmodels.ViewModelPro
 import dagger.android.support.DaggerFragment
 import javax.inject.Inject
 
-//the reason of this class, is to be able to share the same viewmodel to all child fragments
+//the reason of this class, is to provide the same viewModel to all child Fragments,
+//we could have not included this fragment,but in this case, every child fragment will have to include the same method:
+/* viewModel = activity?.run { ViewModelProvider(this, providerFactory).get(AuthViewModel::class.java)   } ?: throw Exception("Invalid Activity")
+* but with this class -> DRY(do not repeat Yourself)
+* */
 abstract class BaseAuthFragment : DaggerFragment() {
     @Inject
     lateinit var providerFactory: ViewModelProviderFactory

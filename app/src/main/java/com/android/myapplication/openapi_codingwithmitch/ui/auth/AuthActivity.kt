@@ -19,6 +19,7 @@ class AuthActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_auth)
 
+        //AuthViewModel has activity as the storeOwner
         viewModel = ViewModelProvider(this, providerFactory).get(AuthViewModel::class.java)
 
     }
