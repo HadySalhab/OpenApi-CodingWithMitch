@@ -1,4 +1,4 @@
-package com.android.myapplication.openapi_codingwithmitch.ui
+package com.android.myapplication.openapi_codingwithmitch.ui.common
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

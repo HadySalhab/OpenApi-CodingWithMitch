@@ -1,9 +1,9 @@
 package com.android.myapplication.openapi_codingwithmitch.di.auth
 
-import com.android.myapplication.openapi_codingwithmitch.ui.auth.ForgotPasswordFragment
-import com.android.myapplication.openapi_codingwithmitch.ui.auth.LauncherFragment
-import com.android.myapplication.openapi_codingwithmitch.ui.auth.LoginFragment
-import com.android.myapplication.openapi_codingwithmitch.ui.auth.RegisterFragment
+import com.android.myapplication.openapi_codingwithmitch.ui.auth.fragments.child.ForgotPasswordFragment
+import com.android.myapplication.openapi_codingwithmitch.ui.auth.fragments.child.LauncherFragment
+import com.android.myapplication.openapi_codingwithmitch.ui.auth.fragments.child.LoginFragment
+import com.android.myapplication.openapi_codingwithmitch.ui.auth.fragments.child.RegisterFragment
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 

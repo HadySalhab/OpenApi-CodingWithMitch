@@ -2,7 +2,7 @@ package com.android.myapplication.openapi_codingwithmitch.di.auth
 
 import androidx.lifecycle.ViewModel
 import com.android.myapplication.openapi_codingwithmitch.di.ViewModelKey
-import com.android.myapplication.openapi_codingwithmitch.ui.auth.AuthViewModel
+import com.android.myapplication.openapi_codingwithmitch.ui.auth.viewmodel.AuthViewModel
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap

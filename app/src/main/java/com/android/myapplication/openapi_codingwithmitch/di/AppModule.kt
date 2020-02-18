@@ -3,10 +3,10 @@ package com.android.myapplication.openapi_codingwithmitch.di
 import android.app.Application
 import androidx.room.Room
 import com.android.myapplication.openapi_codingwithmitch.R
-import com.android.myapplication.openapi_codingwithmitch.persistence.AccountPropertiesDao
+import com.android.myapplication.openapi_codingwithmitch.persistence.auth.AccountPropertiesDao
 import com.android.myapplication.openapi_codingwithmitch.persistence.AppDatabase
 import com.android.myapplication.openapi_codingwithmitch.persistence.AppDatabase.Companion.DATABASE_NAME
-import com.android.myapplication.openapi_codingwithmitch.persistence.AuthTokenDao
+import com.android.myapplication.openapi_codingwithmitch.persistence.auth.AuthTokenDao
 import com.android.myapplication.openapi_codingwithmitch.util.Constants
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager

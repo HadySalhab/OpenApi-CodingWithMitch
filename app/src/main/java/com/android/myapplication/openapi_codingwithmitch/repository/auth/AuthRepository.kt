@@ -4,8 +4,8 @@ import androidx.lifecycle.LiveData
 import com.android.myapplication.openapi_codingwithmitch.api.auth.OpenApiAuthService
 import com.android.myapplication.openapi_codingwithmitch.api.auth.network_responses.LoginResponse
 import com.android.myapplication.openapi_codingwithmitch.api.auth.network_responses.RegistrationResponse
-import com.android.myapplication.openapi_codingwithmitch.persistence.AccountPropertiesDao
-import com.android.myapplication.openapi_codingwithmitch.persistence.AuthTokenDao
+import com.android.myapplication.openapi_codingwithmitch.persistence.auth.AccountPropertiesDao
+import com.android.myapplication.openapi_codingwithmitch.persistence.auth.AuthTokenDao
 import com.android.myapplication.openapi_codingwithmitch.session.SessionManager
 import com.android.myapplication.openapi_codingwithmitch.util.GenericApiResponse
 

@@ -1,10 +1,11 @@
-package com.android.myapplication.openapi_codingwithmitch.models
+package com.android.myapplication.openapi_codingwithmitch.models.auth
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.ForeignKey.CASCADE
 import androidx.room.PrimaryKey
+import com.android.myapplication.openapi_codingwithmitch.models.auth.AccountProperties
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 

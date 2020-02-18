@@ -1,4 +1,4 @@
-package com.android.myapplication.openapi_codingwithmitch.models
+package com.android.myapplication.openapi_codingwithmitch.models.auth
 
 import android.provider.ContactsContract
 import androidx.room.ColumnInfo

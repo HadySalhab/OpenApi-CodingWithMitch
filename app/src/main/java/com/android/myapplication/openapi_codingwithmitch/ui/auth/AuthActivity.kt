@@ -3,7 +3,8 @@ package com.android.myapplication.openapi_codingwithmitch.ui.auth
 import android.os.Bundle
 import androidx.lifecycle.ViewModelProvider
 import com.android.myapplication.openapi_codingwithmitch.R
-import com.android.myapplication.openapi_codingwithmitch.ui.BaseActivity
+import com.android.myapplication.openapi_codingwithmitch.ui.auth.viewmodel.AuthViewModel
+import com.android.myapplication.openapi_codingwithmitch.ui.common.BaseActivity
 import com.android.myapplication.openapi_codingwithmitch.viewmodels.ViewModelProviderFactory
 import javax.inject.Inject
 

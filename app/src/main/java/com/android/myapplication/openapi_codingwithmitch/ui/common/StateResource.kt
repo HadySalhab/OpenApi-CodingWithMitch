@@ -1,4 +1,4 @@
-package com.android.myapplication.openapi_codingwithmitch.ui
+package com.android.myapplication.openapi_codingwithmitch.ui.common
 
 
 data class Loading(val isLoading: Boolean)
@@ -48,7 +48,9 @@ open class Event<out T>(private val content: T) {
         // we don't want an event if the data is null
         fun <T> dataEvent(data: T?): Event<T>? {
             data?.let {
-                return Event(it)
+                return Event(
+                    it
+                )
             }
             return null
         }
@@ -56,7 +58,9 @@ open class Event<out T>(private val content: T) {
         // we don't want an event if the response is null
         fun responseEvent(response: Response?): Event<Response>? {
             response?.let {
-                return Event(response)
+                return Event(
+                    response
+                )
             }
             return null
         }

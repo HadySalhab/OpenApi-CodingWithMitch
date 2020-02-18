@@ -1,10 +1,10 @@
-package com.android.myapplication.openapi_codingwithmitch.persistence
+package com.android.myapplication.openapi_codingwithmitch.persistence.auth
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.android.myapplication.openapi_codingwithmitch.models.AuthToken
+import com.android.myapplication.openapi_codingwithmitch.models.auth.AuthToken
 
 @Dao
 interface AuthTokenDao {

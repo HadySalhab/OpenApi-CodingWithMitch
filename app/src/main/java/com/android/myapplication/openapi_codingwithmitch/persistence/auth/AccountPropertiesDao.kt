@@ -1,11 +1,10 @@
-package com.android.myapplication.openapi_codingwithmitch.persistence
+package com.android.myapplication.openapi_codingwithmitch.persistence.auth
 
-import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.android.myapplication.openapi_codingwithmitch.models.AccountProperties
+import com.android.myapplication.openapi_codingwithmitch.models.auth.AccountProperties
 
 @Dao
 interface AccountPropertiesDao {
@@ -16,9 +15,9 @@ interface AccountPropertiesDao {
     fun insertOrIgnore(accountProperties: AccountProperties):Long
 
     @Query("SELECT * FROM account_properties WHERE pk=:pk")
-    fun searchByPk(pk:Int):AccountProperties?
+    fun searchByPk(pk:Int): AccountProperties?
 
     @Query("SELECT * FROM account_properties WHERE email=:email")
-    fun searchByEmail(email:String):AccountProperties?
+    fun searchByEmail(email:String): AccountProperties?
 
 }

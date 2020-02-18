@@ -1,4 +1,4 @@
-package com.android.myapplication.openapi_codingwithmitch.ui.auth
+package com.android.myapplication.openapi_codingwithmitch.ui.auth.fragments.child
 
 
 import android.os.Bundle
@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.android.myapplication.openapi_codingwithmitch.R
+import com.android.myapplication.openapi_codingwithmitch.ui.auth.fragments.BaseAuthFragment
 import kotlinx.android.synthetic.main.fragment_launcher.*
 
 /**
