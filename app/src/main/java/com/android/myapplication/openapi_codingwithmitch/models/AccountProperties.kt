@@ -7,6 +7,7 @@ import androidx.room.PrimaryKey
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
+//Table
 @Entity(tableName = "account_properties")
 data class AccountProperties(
     @SerializedName("pk")

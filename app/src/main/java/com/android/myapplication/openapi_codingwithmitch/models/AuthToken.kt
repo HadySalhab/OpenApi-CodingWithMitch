@@ -15,17 +15,19 @@ import com.google.gson.annotations.SerializedName
             entity = AccountProperties::class,
             parentColumns = ["pk"],
             childColumns = ["account_pk"],
-            onDelete = CASCADE
+            onDelete = CASCADE //if the row in the parent table is deleted, we want to delete the child as well
         )
     ]
 )
+//child for the Account properties table
 data class AuthToken(
     @PrimaryKey
     @ColumnInfo(name = "account_pk")
-    var account_pk: Int? = -1, //this variable is not retrieved from the server
+    //-1 value here is just to make sure if the foreign key is working
+    var account_pk: Int? = -1, //this variable is the foreign key, refering to the pk in the Account properties
 
     @SerializedName("token")
     @Expose
     @ColumnInfo(name = "token")
-    var token: String? = null
+    var token: String? = null //can be null, when it is null it means you are not authenticated.
 )
