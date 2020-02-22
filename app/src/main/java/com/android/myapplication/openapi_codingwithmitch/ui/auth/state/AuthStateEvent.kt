@@ -7,6 +7,8 @@ sealed class AuthStateEvent {
     * login event
     * register event
     * check previous event (because if token is available in database, we want to skip the login/register event)
+    *
+    * each event should pass with the it the required parameter
     * */
     data class LoginAttemptEvent(
         val email: String,

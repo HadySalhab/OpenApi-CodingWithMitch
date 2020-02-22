@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.android.myapplication.openapi_codingwithmitch.R
 import com.android.myapplication.openapi_codingwithmitch.ui.auth.viewmodel.AuthViewModel
 import com.android.myapplication.openapi_codingwithmitch.ui.common.BaseActivity
+import com.android.myapplication.openapi_codingwithmitch.ui.common.ResponseType
 import com.android.myapplication.openapi_codingwithmitch.ui.main.MainActivity
 import com.android.myapplication.openapi_codingwithmitch.viewmodels.ViewModelProviderFactory
 import javax.inject.Inject
@@ -28,6 +29,42 @@ class AuthActivity : BaseActivity() {
         subscribeObservers()
     }
     fun subscribeObservers(){
+        viewModel.dataState.observe(this, Observer { dataState->
+
+            dataState.data?.let { data->
+                data.data?.let { event->
+                    //we want to handle the data once
+                    //rotation will not trigger the event again
+                    //this method will return the actual generic parameter, which is AuthViewState in this case
+                    event.getContentIfNotHandled()?.let {
+                        it.authToken?.let {
+                            Log.d(TAG, "AuthActivity, DataState: ${it}")
+                            //we are updating a field in the AuthViewState
+                            //which will update the AuthViewState itself
+                            // and trigger any observer
+                            viewModel.setAuthToken(it)
+                        }
+                    }
+                }
+                data.response?.let { event ->
+                    event.getContentIfNotHandled()?.let {
+                        when(it.responseType){
+                            is ResponseType.Dialog->{
+                                //show dialog
+                            }
+                            is ResponseType.Toast->{
+                                // show toast
+                            }
+                            is ResponseType.None->{
+                                Log.e(TAG, "AuthActivity: Response: ${it.message} ")
+                            }
+                        }
+                    }
+                }
+            }
+        })
+
+
         //the viewState will be frequently changed.
         //lets say the user land on the login fragment and submit his detail
         //this will change the viewState that Holds the AuthToken objects

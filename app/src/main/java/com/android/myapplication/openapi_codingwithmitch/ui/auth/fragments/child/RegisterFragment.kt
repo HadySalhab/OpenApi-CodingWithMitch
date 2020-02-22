@@ -10,8 +10,9 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.android.myapplication.openapi_codingwithmitch.R
 import com.android.myapplication.openapi_codingwithmitch.ui.auth.fragments.BaseAuthFragment
+import com.android.myapplication.openapi_codingwithmitch.ui.auth.state.AuthStateEvent
 import com.android.myapplication.openapi_codingwithmitch.ui.auth.state.RegistrationFields
-import kotlinx.android.synthetic.main.fragment_login.input_email
+import kotlinx.android.synthetic.main.fragment_login.*
 import kotlinx.android.synthetic.main.fragment_register.*
 
 /**
@@ -31,6 +32,10 @@ class RegisterFragment : BaseAuthFragment() {
         super.onViewCreated(view, savedInstanceState)
         Log.d(TAG, "RegisterFragment ${viewModel}")
 
+        //we are setting Attempt Register Event
+        register_button.setOnClickListener {
+            register()
+        }
         subscribeObservers()
     }
 
@@ -59,6 +64,15 @@ class RegisterFragment : BaseAuthFragment() {
         })
     }
 
+    fun register(){
+        viewModel.setStateEvent(
+            AuthStateEvent.RegisterAttemptEvent(register_input_email.text.toString(),
+                input_username.text.toString(),
+                input_password_register.text.toString(),
+                input_password_confirm.text.toString())
+        )
+    }
+
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -66,7 +80,7 @@ class RegisterFragment : BaseAuthFragment() {
         viewModel.setRegistrationFields(
             //taking out the entry in the view and update
             RegistrationFields(
-                input_email.text.toString(),
+                register_input_email.text.toString(),
                 input_username.text.toString(),
                 input_password_register.text.toString(),
                 input_password_confirm.text.toString()

@@ -9,8 +9,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.android.myapplication.openapi_codingwithmitch.R
-import com.android.myapplication.openapi_codingwithmitch.models.auth.AuthToken
 import com.android.myapplication.openapi_codingwithmitch.ui.auth.fragments.BaseAuthFragment
+import com.android.myapplication.openapi_codingwithmitch.ui.auth.state.AuthStateEvent
 import com.android.myapplication.openapi_codingwithmitch.ui.auth.state.LoginFields
 import kotlinx.android.synthetic.main.fragment_login.*
 
@@ -32,17 +32,8 @@ class LoginFragment : BaseAuthFragment() {
         Log.d(TAG, "LoginFragment ${viewModel}")
         subscribeObservers()
         login_button.setOnClickListener {
-            //just a forced login
-            //we are changing the viewState field
-            //which will change the viewstate object
-            //which will trigger all active observers
-            //in the auth activity
-            viewModel.setAuthToken(
-                AuthToken(
-                    1,
-                    "gagasgasgasgsagagassga"
-                )
-            )
+            //we are setting the stateEvent to AttemptLoginEvent
+            login()
         }
     }
 
@@ -63,6 +54,13 @@ class LoginFragment : BaseAuthFragment() {
                 }
             }
         })
+    }
+
+    fun login(){
+        viewModel.setStateEvent(
+            AuthStateEvent.LoginAttemptEvent(input_email.text.toString(),
+                input_password.text.toString())
+        )
     }
 
     override fun onDestroyView() {

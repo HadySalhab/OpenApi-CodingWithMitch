@@ -1,8 +1,6 @@
 package com.android.myapplication.openapi_codingwithmitch.ui.auth.viewmodel
 
 import androidx.lifecycle.LiveData
-import com.android.myapplication.openapi_codingwithmitch.api.auth.network_responses.LoginResponse
-import com.android.myapplication.openapi_codingwithmitch.api.auth.network_responses.RegistrationResponse
 import com.android.myapplication.openapi_codingwithmitch.models.auth.AuthToken
 import com.android.myapplication.openapi_codingwithmitch.repository.auth.AuthRepository
 import com.android.myapplication.openapi_codingwithmitch.ui.auth.state.AuthStateEvent
@@ -13,7 +11,6 @@ import com.android.myapplication.openapi_codingwithmitch.ui.auth.state.Registrat
 import com.android.myapplication.openapi_codingwithmitch.ui.common.BaseViewModel
 import com.android.myapplication.openapi_codingwithmitch.ui.common.DataState
 import com.android.myapplication.openapi_codingwithmitch.util.AbsentLiveData
-import com.android.myapplication.openapi_codingwithmitch.util.GenericApiResponse
 import javax.inject.Inject
 
 //this class will live as long as the authActivity is not FINISHED
@@ -24,20 +21,6 @@ constructor(
     val authRepository: AuthRepository
 ):BaseViewModel<AuthStateEvent,AuthViewState>(){
 
-    fun testLogin():LiveData<GenericApiResponse<LoginResponse>>{
-        return authRepository.testLoginRequest(
-            "mitchelltabian@gmail.com",
-            "codingwithmitch1"
-        )
-    }
-    fun testRegister():LiveData<GenericApiResponse<RegistrationResponse>>{
-        return authRepository.testRegitrationRequest(
-            "mitchelltabian1234@gmail.com",
-            "mitchelltabian1234",
-            "codingwithmitch1",
-            "codingwithmitch1"
-        )
-    }
 
     //will be triggered whenever the stateEvent is changed.
     //will return Livedata to the dataState
@@ -46,11 +29,16 @@ constructor(
         when(stateEvent){
             //are we trying to login?
             is LoginAttemptEvent->{
-                return AbsentLiveData.create()
+                return authRepository.attemptLogin(stateEvent.email,stateEvent.password)
             }
             //are we trying to register?
             is RegisterAttemptEvent->{
-                return AbsentLiveData.create()
+                return authRepository.attemptRegistration(
+                    stateEvent.email,
+                    stateEvent.username,
+                    stateEvent.password,
+                    stateEvent.confirm_password
+                )
             }
             //are we checking previous authentication?
             is CheckPreviousAuthEvent->{

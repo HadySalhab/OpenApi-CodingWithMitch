@@ -23,6 +23,7 @@ open class Event<out T>(private val content: T) {
      */
 
     //We want to look at the event only once
+    //return its generic param
     fun getContentIfNotHandled(): T? {
         return if (hasBeenHandled) {
             null
@@ -41,9 +42,14 @@ open class Event<out T>(private val content: T) {
         return "Event(content=$content, hasBeenHandled=$hasBeenHandled)"
     }
 
+    /*
+    * Factory Methods
+    *
+    * */
     companion object {
 
         private val TAG: String = "AppDebug"
+
 
         // we don't want an event if the data is null
         fun <T> dataEvent(data: T?): Event<T>? {
