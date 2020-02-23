@@ -26,7 +26,7 @@ abstract class BaseActivity :DaggerAppCompatActivity(),DataStateChangeListener{
                 it.error?.let { errorEvent-> //error
                     handleStateError(errorEvent)
                 }
-                it.data?.let {
+                it.data?.let { //we want only the response in the success state, the data itself is being handled in the activity itself
                     it.response?.let { responseEvent-> //response in data state
                         handleStateResponse(responseEvent)
                     }

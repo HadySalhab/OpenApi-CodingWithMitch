@@ -3,6 +3,7 @@ package com.android.myapplication.openapi_codingwithmitch.ui.common
 
 data class Loading(val isLoading: Boolean){}
 
+//reponse here in success, to show success dialog for example
 data class Data<T>(val data: Event<T>?, val response: Event<Response>?){}
 
 data class StateError(val response: Response){}
