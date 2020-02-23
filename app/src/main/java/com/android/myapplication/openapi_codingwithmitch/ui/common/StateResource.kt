@@ -1,9 +1,14 @@
 package com.android.myapplication.openapi_codingwithmitch.ui.common
 
 
-data class Loading(val isLoading: Boolean)
-data class Data<T>(val data: Event<T>?, val response: Event<Response>?)
-data class StateError(val response: Response)
+data class Loading(val isLoading: Boolean){}
+
+data class Data<T>(val data: Event<T>?, val response: Event<Response>?){}
+
+data class StateError(val response: Response){}
+
+
+
 data class Response(val message: String?, val responseType: ResponseType) //toast,dialogs,...
 sealed class ResponseType {
     class Toast : ResponseType()

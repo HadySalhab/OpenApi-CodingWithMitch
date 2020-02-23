@@ -2,10 +2,13 @@ package com.android.myapplication.openapi_codingwithmitch.ui.auth.state
 
 import com.android.myapplication.openapi_codingwithmitch.models.auth.AuthToken
 
+
+//we split the fields into classes here because multiple fragments(views) are sharing the same viewModel
+//and each viewModel has one viewState
 data class AuthViewState(
-    var registrationFields: RegistrationFields? = RegistrationFields(),
-    var loginFields: LoginFields? = LoginFields(),
-    var authToken: AuthToken? = null
+    var registrationFields: RegistrationFields? = RegistrationFields(),//belongs to register fragment
+    var loginFields: LoginFields? = LoginFields(), //belongs to login fragment
+    var authToken: AuthToken? = null //we need it to capture the response from the api so we send it back to the SessionManager
 )
 
 

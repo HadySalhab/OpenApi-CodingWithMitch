@@ -26,6 +26,7 @@ constructor(
     //will return Livedata to the dataState
     //the datastate will change the viewstate
     override fun handleStateEvent(stateEvent: AuthStateEvent): LiveData<DataState<AuthViewState>> {
+        //state event is a sealed class
         when(stateEvent){
             //are we trying to login?
             is LoginAttemptEvent->{
@@ -88,5 +89,14 @@ constructor(
 
     override fun initNewViewState(): AuthViewState {
         return AuthViewState()
+    }
+
+    fun cancelActiveJobs(){
+        authRepository.cancelActiveJob()
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        cancelActiveJobs()
     }
 }

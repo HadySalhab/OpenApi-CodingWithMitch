@@ -5,6 +5,9 @@ import android.os.Bundle
 import android.util.Log
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavController
+import androidx.navigation.NavDestination
+import androidx.navigation.findNavController
 import com.android.myapplication.openapi_codingwithmitch.R
 import com.android.myapplication.openapi_codingwithmitch.ui.auth.viewmodel.AuthViewModel
 import com.android.myapplication.openapi_codingwithmitch.ui.common.BaseActivity
@@ -13,7 +16,7 @@ import com.android.myapplication.openapi_codingwithmitch.ui.main.MainActivity
 import com.android.myapplication.openapi_codingwithmitch.viewmodels.ViewModelProviderFactory
 import javax.inject.Inject
 
-class AuthActivity : BaseActivity() {
+class AuthActivity : BaseActivity(), NavController.OnDestinationChangedListener {
 
     @Inject
     lateinit var providerFactory: ViewModelProviderFactory
@@ -26,6 +29,7 @@ class AuthActivity : BaseActivity() {
 
         //AuthViewModel has activity as the storeOwner
         viewModel = ViewModelProvider(this, providerFactory).get(AuthViewModel::class.java)
+        findNavController(R.id.auth_host_fragment).addOnDestinationChangedListener(this) //we registered this activity as a listener to any navigation, so we can cancel the job
         subscribeObservers()
     }
     fun subscribeObservers(){
@@ -92,5 +96,13 @@ class AuthActivity : BaseActivity() {
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
         finish()
+    }
+
+    override fun onDestinationChanged(
+        controller: NavController,
+        destination: NavDestination,
+        arguments: Bundle?
+    ) {
+        viewModel.cancelActiveJobs()
     }
 }

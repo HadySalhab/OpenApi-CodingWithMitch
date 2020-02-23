@@ -73,6 +73,7 @@ abstract class NetworkBoundResource<ResponseObject, ViewStateType>
         }
     }
 
+    //this is running on the IO dispatcher
     suspend fun handleNetworkCall(response: GenericApiResponse<ResponseObject>?) {
         when (response) {
             is ApiSuccessResponse -> {
@@ -111,6 +112,8 @@ abstract class NetworkBoundResource<ResponseObject, ViewStateType>
             responseType = ResponseType.Dialog()
         }
         //this will terminate job (we can do that because job is of type CompletableJob)
+        //this will invoke invokeOnCompletion callback
+        //and update the mediatorlivedata.
         onCompleteJob(
             DataState.error(
                 response = Response(message = msg, responseType = responseType)
@@ -122,8 +125,8 @@ abstract class NetworkBoundResource<ResponseObject, ViewStateType>
         //we need the main dispatcher so we can set value to the livedata
         GlobalScope.launch(Main) {
             //terminate all coroutines within this job subcategory
-            job.complete()
-            setValue(dataState)
+            job.complete()       //this will invoke invokeOnCompletion callback
+            setValue(dataState)  //and update the mediatorlivedata.
         }
     }
 
