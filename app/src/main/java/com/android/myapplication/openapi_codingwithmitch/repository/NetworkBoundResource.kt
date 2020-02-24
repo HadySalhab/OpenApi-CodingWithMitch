@@ -8,10 +8,10 @@ import com.android.myapplication.openapi_codingwithmitch.ui.common.Response
 import com.android.myapplication.openapi_codingwithmitch.ui.common.ResponseType
 import com.android.myapplication.openapi_codingwithmitch.util.*
 import com.android.myapplication.openapi_codingwithmitch.util.Constants.Companion.NETWORK_TIMEOUT
+import com.android.myapplication.openapi_codingwithmitch.util.Constants.Companion.TESTING_CACHE_DELAY
 import com.android.myapplication.openapi_codingwithmitch.util.Constants.Companion.TESTING_NETWORK_DELAY
 import com.android.myapplication.openapi_codingwithmitch.util.ErrorHandling.Companion.ERROR_CHECK_NETWORK_CONNECTION
 import com.android.myapplication.openapi_codingwithmitch.util.ErrorHandling.Companion.ERROR_UNKNOWN
-import com.android.myapplication.openapi_codingwithmitch.util.ErrorHandling.Companion.UNABLE_TODO_OPERATION_WO_INTERNET
 import com.android.myapplication.openapi_codingwithmitch.util.ErrorHandling.Companion.UNABLE_TO_RESOLVE_HOST
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
@@ -20,7 +20,8 @@ import kotlinx.coroutines.Dispatchers.Main
 
 abstract class NetworkBoundResource<ResponseObject, ViewStateType>
     (
-    isNetworkAvailable: Boolean //is there a network connection
+    isNetworkAvailable: Boolean, //is there a network connection
+    isNetworkRequest: Boolean
 ) {
     companion object {
         private const val TAG = "AppDebug"
@@ -37,41 +38,60 @@ abstract class NetworkBoundResource<ResponseObject, ViewStateType>
         setJob(initNewJob())
         setValue(DataState.loading(isLoading = true, cachedData = null))
 
-        if (isNetworkAvailable) {
-            //this will launch a coroutine attached to the job subcategory and on IO dispatcher
-            coroutineScope.launch {
-                //simulate network delay for testing
-                delay(TESTING_NETWORK_DELAY)
+        if(isNetworkRequest){
+            //all requests that requires network connection goes here
+            if (isNetworkAvailable) {
+                //this will launch a coroutine attached to the job subcategory and on IO dispatcher
+                coroutineScope.launch {
+                    //simulate network delay for testing
+                    delay(TESTING_NETWORK_DELAY)
 
-                //switching the context of the coroutine above
-                withContext(Main) {
-                    //make network call
-                    val apiResponse = createCall()
-                    result.addSource(apiResponse) { response ->
-                        result.removeSource(apiResponse)
-                        //this will launch another coroutine attached to the job subcategory and on IO dispatcher
-                        coroutineScope.launch {
-                            handleNetworkCall(response)
+                    //switching the context of the coroutine above
+                    withContext(Main) {
+                        //make network call
+                        val apiResponse = createCall()
+                        result.addSource(apiResponse) { response ->
+                            result.removeSource(apiResponse)
+                            //this will launch another coroutine attached to the job subcategory and on IO dispatcher
+                            //the reason for this coroutine, is because we have an interaction with the database as well
+                            coroutineScope.launch {
+                                handleNetworkCall(response)
+                            }
+
                         }
-
                     }
                 }
-            }
-            //THIS WILL LAUNCH AT THE SAME TIME OF THE ABOVE COROUTINE
-            GlobalScope.launch(IO) {
-                delay(NETWORK_TIMEOUT)
-                //checking if the coroutines within the job subcategory  has finished their  jobs
-                if (!job.isCompleted) {
-                    Log.e(TAG, "NetworkBoundResource:Job Network Timeout...")
-                    job.cancel(CancellationException(UNABLE_TO_RESOLVE_HOST)) //cancellation exception will run invokeOnCompletion....
+                //THIS WILL LAUNCH AT THE SAME TIME OF THE ABOVE COROUTINE
+                GlobalScope.launch(IO) {
+                    delay(NETWORK_TIMEOUT)
+                    //checking if the coroutines within the job subcategory  has finished their  jobs
+                    if (!job.isCompleted) {
+                        Log.e(TAG, "NetworkBoundResource:Job Network Timeout...")
+                        //this will cancel all coroutines attached to this job
+                        job.cancel(CancellationException(UNABLE_TO_RESOLVE_HOST)) //cancellation exception will run invokeOnCompletion....
+                    }
+
                 }
 
+            }else {
+                onErrorReturn(ErrorHandling.UNABLE_TODO_OPERATION_WO_INTERNET, true, false)
+            }
+        }
+        //requests that do not require a network connection
+        else{
+            coroutineScope.launch {
+                //fake delay for testing cache
+                delay(TESTING_CACHE_DELAY)
+
+                //view data from cache only and return
+                createCacheRequestAndReturn()
             }
 
-        } else {
-            onErrorReturn(UNABLE_TODO_OPERATION_WO_INTERNET, true, false)
         }
+
     }
+
+    abstract suspend fun createCacheRequestAndReturn()
 
     //this is running on the IO dispatcher
     suspend fun handleNetworkCall(response: GenericApiResponse<ResponseObject>?) {
@@ -81,11 +101,18 @@ abstract class NetworkBoundResource<ResponseObject, ViewStateType>
             }
             is ApiEmptyResponse -> {
                 Log.e(TAG, "NetworkBoundResource: Request returned NOTHING (HTTP 204)")
-                onErrorReturn("HTTP 204. Returned Nothing.", true, false) //this will call onCompleteJob
+                onErrorReturn(
+                    "HTTP 204. Returned Nothing.",
+                    true,
+                    false
+                ) //this will call onCompleteJob
 
             }
             is ApiErrorResponse -> {
-                Log.e(TAG, "NetworkBoundResource: ${response.errorMessage}") //this will call onCompleteJob
+                Log.e(
+                    TAG,
+                    "NetworkBoundResource: ${response.errorMessage}"
+                ) //this will call onCompleteJob
                 onErrorReturn(response.errorMessage, true, false)
             }
 
@@ -121,11 +148,13 @@ abstract class NetworkBoundResource<ResponseObject, ViewStateType>
         )
     }
 
+
+    //complete the job and update the mediatorLiveData
     fun onCompleteJob(dataState: DataState<ViewStateType>) {
         //we need the main dispatcher so we can set value to the livedata
         GlobalScope.launch(Main) {
             //terminate all coroutines within this job subcategory
-            job.complete()       //this will invoke invokeOnCompletion callback
+            job.complete()       //this will invoke invokeOnCompletion callback , but onComplete does nothing
             setValue(dataState)  //and update the mediatorlivedata.
         }
     }

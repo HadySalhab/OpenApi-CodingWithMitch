@@ -10,6 +10,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.findNavController
 import com.android.myapplication.openapi_codingwithmitch.R
+import com.android.myapplication.openapi_codingwithmitch.ui.auth.state.AuthStateEvent
 import com.android.myapplication.openapi_codingwithmitch.ui.auth.viewmodel.AuthViewModel
 import com.android.myapplication.openapi_codingwithmitch.ui.common.BaseActivity
 import com.android.myapplication.openapi_codingwithmitch.ui.main.MainActivity
@@ -33,9 +34,11 @@ class AuthActivity : BaseActivity(), NavController.OnDestinationChangedListener 
         viewModel = ViewModelProvider(this, providerFactory).get(AuthViewModel::class.java)
         findNavController(R.id.auth_host_fragment).addOnDestinationChangedListener(this) //we registered this activity as a listener to any navigation, so we can cancel the job
         subscribeObservers()
+        checkPreviousAuthUser()
     }
     fun subscribeObservers(){
         viewModel.dataState.observe(this, Observer { dataState->
+            //the method implementation is in the BaseActivity
             onDataStateChange(dataState)
             dataState.data?.let { data->
                 data.data?.let { event->
@@ -79,6 +82,10 @@ class AuthActivity : BaseActivity(), NavController.OnDestinationChangedListener 
             }
         })
     }
+    private fun checkPreviousAuthUser(){
+        viewModel.setStateEvent(AuthStateEvent.CheckPreviousAuthEvent())
+    }
+
     private fun navMainActivity(){
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)

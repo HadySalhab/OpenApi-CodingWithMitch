@@ -23,9 +23,12 @@ abstract class BaseActivity :DaggerAppCompatActivity(),DataStateChangeListener{
         dataState?.let {
             GlobalScope.launch (Main){
                 displayProgressBar(it.loading.isLoading) //loading
+
+                //case error
                 it.error?.let { errorEvent-> //error
                     handleStateError(errorEvent)
                 }
+                //case data
                 it.data?.let { //we want only the response in the success state, the data itself is being handled in the activity itself
                     it.response?.let { responseEvent-> //response in data state
                         handleStateResponse(responseEvent)

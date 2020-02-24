@@ -10,7 +10,6 @@ import com.android.myapplication.openapi_codingwithmitch.ui.auth.state.LoginFiel
 import com.android.myapplication.openapi_codingwithmitch.ui.auth.state.RegistrationFields
 import com.android.myapplication.openapi_codingwithmitch.ui.common.BaseViewModel
 import com.android.myapplication.openapi_codingwithmitch.ui.common.DataState
-import com.android.myapplication.openapi_codingwithmitch.util.AbsentLiveData
 import javax.inject.Inject
 
 //this class will live as long as the authActivity is not FINISHED
@@ -43,7 +42,7 @@ constructor(
             }
             //are we checking previous authentication?
             is CheckPreviousAuthEvent->{
-                return AbsentLiveData.create()
+                return authRepository.checkPreviousAuthUser()
             }
         }
     }
@@ -51,6 +50,7 @@ constructor(
 
     /*
     * Setter for each viewstate field
+    * will update the viewState object in the liveData
     * */
     fun setRegistrationFields(registrationFields: RegistrationFields){
         //this will either return the value of the LiveData<ViewState> or will create a new ViewState instance
